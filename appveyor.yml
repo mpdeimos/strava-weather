@@ -14,8 +14,8 @@ build_script:
 - dotnet build -c %CONFIGURATION% --version-suffix %LABEL%
 #test_script:
 #- dotnet test "test\MyFirstUnitTests" -c %CONFIGURATION%
-cache:
-- '%USERPROFILE%\.nuget\packages'
+#cache:
+#- '%USERPROFILE%\.nuget\packages'
 #on_finish: # Run the demo to show that it works
 #- dotnet artifacts\ConsoleApplication\ConsoleApplication.dll
 
