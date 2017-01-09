@@ -1,6 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Mpdeimos.StravaWeather.WebApi;
+using Refit;
 using static Mpdeimos.StravaWeather.Database;
 
 namespace Mpdeimos.StravaWeather
@@ -28,6 +31,13 @@ namespace Mpdeimos.StravaWeather
 			db.Activities.Add(activity);
 			db.SaveChanges();
 			return activity;
+		}
+
+		[HttpGet("req")]
+		public async Task<string> Req()
+		{
+			var api = RestService.For<ITestApi>("https://jsonplaceholder.typicode.com");
+			return await api.GetUser("1");
 		}
 	}
 }

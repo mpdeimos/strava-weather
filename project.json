@@ -12,7 +12,8 @@
     "Microsoft.EntityFrameworkCore.InMemory": "1.1.0",
     "Microsoft.Extensions.Logging": "1.1.0",
     "Microsoft.Extensions.Logging.Console": "1.1.0",
-    "Microsoft.Extensions.Logging.Debug": "1.1.0"
+    "Microsoft.Extensions.Logging.Debug": "1.1.0",
+    "refit": "3.0.1"
   },
   "frameworks": {
     "netcoreapp1.1": {
@@ -27,5 +28,10 @@
   },
   "tooling": {
     "defaultNamespace": "Mpdeimos.StravaWeather"
+  },
+  "scripts": {
+    "precompile": [
+      "node .vscode/refit-generate.js 3.0.1 WebApi"
+    ]
   }
 }
