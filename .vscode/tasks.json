@@ -7,7 +7,16 @@
         {
             "taskName": "build",
             "args": [
-                "${workspaceRoot}/project.json"
+                "${workspaceRoot}/src/Mpdeimos.StravaWeather",
+                "${workspaceRoot}/test/Mpdeimos.StravaWeather_Test"
+            ],
+            "isBuildCommand": true,
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "taskName": "test",
+            "args": [
+                "${workspaceRoot}/test/Mpdeimos.StravaWeather_Test"
             ],
             "isBuildCommand": true,
             "problemMatcher": "$msCompile"

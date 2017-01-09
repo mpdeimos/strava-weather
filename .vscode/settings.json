@@ -1,8 +1,7 @@
 {
 	"files.exclude": {
 		".git/": true,
-		".nuget/": true,
-		"bin/": true,
-		"obj/": true
+		"**/bin/": true,
+		"**/obj/": true
 	}
 }

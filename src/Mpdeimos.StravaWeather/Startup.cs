@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
-using Npgsql;
 using Microsoft.Extensions.Logging;
 using System;
+using Mpdeimos.StravaWeather.Model;
 
 namespace Mpdeimos.StravaWeather
 {
@@ -21,18 +21,8 @@ namespace Mpdeimos.StravaWeather
 				}
 				else
 				{
-					var databaseUri = new Uri(databaseUrl);
-					Console.WriteLine($"Using postgres db {databaseUri.Host}");
-					var userInfo = databaseUri.UserInfo.Split(new []{':'}, 2);
-					var connection = new NpgsqlConnectionStringBuilder
-					{
-						Username = userInfo[0],
-						Password = userInfo[1],
-						Host = databaseUri.Host,
-						Port = databaseUri.Port,
-						Database = databaseUri.AbsolutePath.Trim('/')
-					};
-					options.UseNpgsql(connection.ToString());
+					Console.WriteLine($"Using postgres db");
+					options.UseNpgsql(DatabaseUtil.ConvertDatabaseConnectionString(databaseUrl));
 				}
 			});
 			services.AddMvc();

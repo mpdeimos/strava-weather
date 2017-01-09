@@ -3,3 +3,4 @@ obj/
 project.lock.json
 *.g.cs
 /.nuget/
+TestResult.xml

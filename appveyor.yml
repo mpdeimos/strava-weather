@@ -4,18 +4,13 @@ configuration:
 - Release
 platform: Any CPU
 environment:
-  # Don't report back to the mothership
   DOTNET_CLI_TELEMETRY_OPTOUT: 1
 init:
 - ps: $Env:LABEL = "CI" + $Env:APPVEYOR_BUILD_NUMBER.PadLeft(5, "0")
 before_build:
 - appveyor-retry dotnet restore -v Minimal
 build_script:
-- dotnet build -c %CONFIGURATION% --version-suffix %LABEL%
-#test_script:
-#- dotnet test "test\MyFirstUnitTests" -c %CONFIGURATION%
-#cache:
-#- '%USERPROFILE%\.nuget\packages'
-#on_finish: # Run the demo to show that it works
-#- dotnet artifacts\ConsoleApplication\ConsoleApplication.dll
+- dotnet build src/Mpdeimos.StravaWeather -c %CONFIGURATION% --version-suffix %LABEL%
+test_script:
+- dotnet test test/Mpdeimos.StravaWeather_Test -c %CONFIGURATION%
 

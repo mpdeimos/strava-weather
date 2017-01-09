@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Mpdeimos.StravaWeather.WebApi;
 using Refit;
-using static Mpdeimos.StravaWeather.Database;
+using Mpdeimos.StravaWeather.Model;
 
 namespace Mpdeimos.StravaWeather
 {

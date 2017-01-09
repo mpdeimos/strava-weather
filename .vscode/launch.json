@@ -6,7 +6,7 @@
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceRoot}/bin/Debug/netcoreapp1.1/strava-weather.dll",
+            "program": "${workspaceRoot}/src/Mpdeimos.StravaWeather/bin/Debug/netcoreapp1.1/strava-weather.dll",
             "args": [],
             "cwd": "${workspaceRoot}",
             "externalConsole": false,

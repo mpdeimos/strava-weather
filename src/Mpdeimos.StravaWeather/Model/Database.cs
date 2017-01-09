@@ -1,9 +1,8 @@
-using System.ComponentModel.DataAnnotations;
 using Microsoft.EntityFrameworkCore;
 
-namespace Mpdeimos.StravaWeather
+namespace Mpdeimos.StravaWeather.Model
 {
-	public class Database : DbContext
+    public class Database : DbContext
 	{
 		public DbSet<Activity> Activities { get; set; }
 
@@ -11,12 +10,6 @@ namespace Mpdeimos.StravaWeather
 			: base(options)
 		{
 			Database.EnsureCreated();
-		}
-
-		public class Activity
-		{
-			[Key]
-			public int Id { get; set; }
 		}
 	}
 }
