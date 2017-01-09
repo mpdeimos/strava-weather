@@ -18,8 +18,7 @@
             "args": [
                 "${workspaceRoot}/test/Mpdeimos.StravaWeather_Test"
             ],
-            "isBuildCommand": true,
-            "problemMatcher": "$msCompile"
+            "isTestCommand": true,
         }
     ]
 }

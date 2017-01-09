@@ -1,1 +1,1 @@
-web: dotnet ./app.dll --urls http://+:\$PORT
+web: dotnet ./Mpdeimos.StravaWeather.dll --urls http://+:\$PORT
