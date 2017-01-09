@@ -1,14 +1,33 @@
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.AspNetCore.Mvc;
+using static Mpdeimos.StravaWeather.Database;
 
 namespace Mpdeimos.StravaWeather
 {
-    [Route("/")]
+	[Route("/")]
 	public class Controller
 	{
-		[HttpGet]
-		public string Get()
+		private Database db;
+
+		public Controller(Database db)
 		{
-			return "Hello World";
+			this.db = db;
+		}
+
+		[HttpGet]
+		public List<Activity> Get()
+		{
+			return db.Activities.ToList();
+		}
+
+		[HttpGet("add/{id}")]
+		public Activity Add(int id)
+		{
+			var activity = new Activity{Id=id};
+			db.Activities.Add(activity);
+			db.SaveChanges();
+			return activity;
 		}
 	}
 }
