@@ -2,7 +2,7 @@
 using Npgsql;
 using NUnit.Framework;
 
-namespace Mpdeimos.StravaWeather.Model
+namespace Mpdeimos.StravaWeather.Models
 {
 	[TestFixture]
 	public class DatabaseUtilTest

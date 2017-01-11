@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Mpdeimos.StravaWeather.Model
+namespace Mpdeimos.StravaWeather.Models
 {
 	public class Activity
 	{

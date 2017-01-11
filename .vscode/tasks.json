@@ -18,7 +18,7 @@
             "args": [
                 "${workspaceRoot}/test/Mpdeimos.StravaWeather_Test"
             ],
-            "isTestCommand": true,
+            "isTestCommand": true
         }
     ]
 }

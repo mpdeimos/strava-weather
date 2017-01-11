@@ -1,7 +1,7 @@
 using System;
 using Npgsql;
 
-namespace Mpdeimos.StravaWeather.Model
+namespace Mpdeimos.StravaWeather.Models
 {
 	public static class DatabaseUtil
 	{

@@ -6,9 +6,12 @@
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceRoot}/src/Mpdeimos.StravaWeather/bin/Debug/netcoreapp1.1/strava-weather.dll",
+            "program": "${workspaceRoot}/src/Mpdeimos.StravaWeather/bin/Debug/netcoreapp1.1/Mpdeimos.StravaWeather.dll",
             "args": [],
-            "cwd": "${workspaceRoot}",
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "cwd": "${workspaceRoot}/src/Mpdeimos.StravaWeather",
             "externalConsole": false,
             "stopAtEntry": false,
             "internalConsoleOptions": "openOnSessionStart"

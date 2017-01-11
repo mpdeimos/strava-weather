@@ -4,16 +4,16 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Mpdeimos.StravaWeather.WebApi;
 using Refit;
-using Mpdeimos.StravaWeather.Model;
+using Mpdeimos.StravaWeather.Models;
 
-namespace Mpdeimos.StravaWeather
+namespace Mpdeimos.StravaWeather.Controllers
 {
-	[Route("/")]
-	public class Controller
+	[Route("/main")]
+	public class MainController
 	{
 		private Database db;
 
-		public Controller(Database db)
+		public MainController(Database db)
 		{
 			this.db = db;
 		}
@@ -31,13 +31,6 @@ namespace Mpdeimos.StravaWeather
 			db.Activities.Add(activity);
 			db.SaveChanges();
 			return activity;
-		}
-
-		[HttpGet("req")]
-		public async Task<string> Req()
-		{
-			var api = RestService.For<ITestApi>("https://jsonplaceholder.typicode.com");
-			return await api.GetUser("1");
 		}
 	}
 }
