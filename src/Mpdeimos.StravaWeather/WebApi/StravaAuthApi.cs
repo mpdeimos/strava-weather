@@ -1,13 +1,13 @@
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-using Refit;
+using RestEase;
 
 namespace Mpdeimos.StravaWeather.WebApi
 {
 	public interface StravaAuthApi
 	{
 		[Post("/token")]
-		Task<OAuthResponse> GetToken([AliasAs("client_id")] int clientId, [AliasAs("client_secret")] string clientSecret, string code);
+		Task<OAuthResponse> GetToken([Query("client_id")] int clientId, [Query("client_secret")] string clientSecret, [Query] string code);
 	}
 
 	public class OAuthResponse
