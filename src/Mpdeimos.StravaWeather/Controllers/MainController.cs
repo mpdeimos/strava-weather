@@ -1,9 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Mpdeimos.StravaWeather.WebApi;
-using Refit;
 using Mpdeimos.StravaWeather.Models;
 
 namespace Mpdeimos.StravaWeather.Controllers

@@ -12,7 +12,7 @@ namespace Mpdeimos.StravaWeather.WebApi
 
 	public class OAuthResponse
 	{
-		[JsonProperty(PropertyName="access_token")]
+		[JsonProperty("access_token")]
 		public string AccessToken { get; set; }
 
 		public StravaAthlete Athlete { get; set; }

@@ -16,7 +16,7 @@ namespace Mpdeimos.StravaWeather
 				.UseContentRoot(Directory.GetCurrentDirectory())
 				.UseConfiguration(configurations)
 				.UseKestrel()
-				.UseStartup<Startup>()
+				.UseStartup<Mpdeimos.StravaWeather.Core.Startup>()
 				.Build();
 
 			host.Run();
