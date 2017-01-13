@@ -7,6 +7,8 @@ using Mpdeimos.StravaWeather.Models;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Mpdeimos.StravaWeather.Config;
+using Mpdeimos.StravaWeather.Utils;
+using Microsoft.Extensions.Options;
 using Mpdeimos.StravaWeather.WebApi;
 
 namespace Mpdeimos.StravaWeather.Core
@@ -32,7 +34,8 @@ namespace Mpdeimos.StravaWeather.Core
 		public void ConfigureServices(IServiceCollection services)
 		{
 			services.AddOptions();
-			services.Configure<StravaAppConfig>(Configuration.GetSection("StravaAppConfig"));
+			services.Configure<StravaAppConfig>(Configuration.GetSection("StravaApp"));
+			services.Configure<StravaAppConfig>(Configuration.GetSection("DarkSky"));
 
 			services.AddDbContext<Database>(options =>
 			{
@@ -51,7 +54,8 @@ namespace Mpdeimos.StravaWeather.Core
 
 			services.AddMvc(config => { config.Filters.Add(typeof(ExceptionHandler)); });
 
-			services.AddTransient<Api>();
+			services.AddSingletonFactory<StravaAuthApi, StravaAuthApiFactory>();
+			services.AddSingletonFactory<StravaApi, StravaApiFactory>();
 		}
 
 		public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory)

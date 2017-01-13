@@ -14,9 +14,9 @@ namespace Mpdeimos.StravaWeather.Controllers
 	{
 		private readonly Database db;
 		private readonly StravaAppConfig stravaAppConfig;
-		private readonly Api api;
+		private readonly StravaAuthApi api;
 
-		public StravaAuthController(Database db, Api api, IOptions<StravaAppConfig> stravaAppConfig)
+		public StravaAuthController(Database db, StravaAuthApi api, IOptions<StravaAppConfig> stravaAppConfig)
 		{
 			this.stravaAppConfig = stravaAppConfig.Value;
 			this.db = db;
@@ -34,7 +34,7 @@ namespace Mpdeimos.StravaWeather.Controllers
 		[HttpGet("connected")]
 		public async Task<string> Connected(string code)
 		{
-			var response = await api.StravaAuth.GetToken(stravaAppConfig.ClientId, stravaAppConfig.ClientSectret, code);
+			var response = await api.GetToken(stravaAppConfig.ClientId, stravaAppConfig.ClientSectret, code);
 			this.db.AccessTokens.Add(new AccessToken
 			{
 				UserId = response.Athlete.Id,

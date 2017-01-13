@@ -14,10 +14,10 @@ namespace Mpdeimos.StravaWeather.Controllers
 	public class StravaActivityController : ControllerBase
 	{
 		private readonly Database db;
-		private readonly Api api;
+		private readonly StravaApi api;
 
 
-		public StravaActivityController(Database db, Api api)
+		public StravaActivityController(Database db, StravaApi api)
 		{
 			this.db = db;
 			this.api = api;
@@ -35,9 +35,9 @@ namespace Mpdeimos.StravaWeather.Controllers
 					throw new HttpException(HttpStatusCode.BadRequest, "Provided url is not an Strava activity url");
 				}
 
-				var activity = await api.Strava.GetActivity(int.Parse(match.Groups[1].Value));
+				var activity = await api.GetActivity(int.Parse(match.Groups[1].Value));
 				var token = db.AccessTokens.Where(t => t.UserId == activity.Athlete.Id).First();
-				activity = await api.Strava.SetActivityName(activity.Id, activity.Name + ".", token.Token);
+				activity = await api.SetActivityName(activity.Id, activity.Name + ".", token.Token);
 				return activity;
 			}
 		}
