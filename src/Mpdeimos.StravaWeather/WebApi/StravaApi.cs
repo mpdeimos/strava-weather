@@ -1,6 +1,5 @@
 using System;
 using System.Threading.Tasks;
-using Mpdeimos.StravaWeather.Models;
 using Newtonsoft.Json;
 using RestEase;
 
@@ -11,6 +10,9 @@ namespace Mpdeimos.StravaWeather.WebApi
 		[Get("/activities/{id}")]
 		Task<Activity> GetActivity([Path] int id);
 
+		[Get("athlete/activities")]
+		Task<Activity[]> GetActivities([Query("access_token")] string accessToken);
+
 		[Put("/activities/{id}")]
 		Task<Activity> SetActivityName([Path] int id, [Query] string name, [Query("access_token")] string accessToken);
 	}
@@ -20,8 +22,12 @@ namespace Mpdeimos.StravaWeather.WebApi
 		public int Id { get; set; }
 		public string Name { get; set; }
 		public Athlete Athlete { get; set; }
-		public DateTime StartDate { get; set; }
-		public int ElapsedTime { get; set; }
+
+		[JsonProperty("start_date")]
+		public DateTimeOffset StartDate { get; set; }
+
+		[JsonProperty("elapsed_time")]
+		public int ElapsedSeconds { get; set; }
 
 		[JsonProperty("start_latlng")]
 		public decimal[] StartLocation { get; set; }
@@ -29,6 +35,25 @@ namespace Mpdeimos.StravaWeather.WebApi
 		[JsonProperty("end_latlng")]
 		public decimal[] EndLocation { get; set; }
 
+		public DateTimeOffset MeanDate => StartDate.AddSeconds(ElapsedSeconds / 2);
+
+		public decimal[] MeanLocation
+		{
+			get
+			{
+				if (StartLocation == null && EndLocation == null)
+				{
+					return null;
+				}
+
+				if (EndLocation == null)
+				{
+					return StartLocation;
+				}
+
+				return new decimal[] { (StartLocation[0] + EndLocation[0]) / 2, (StartLocation[1] + EndLocation[1]) / 2 };
+			}
+		}
 	}
 
 	public class Athlete

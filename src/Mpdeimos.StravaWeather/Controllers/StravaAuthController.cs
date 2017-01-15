@@ -9,7 +9,7 @@ using Mpdeimos.StravaWeather.WebApi;
 
 namespace Mpdeimos.StravaWeather.Controllers
 {
-    [Route("strava-connect")]
+	[Route("strava-connect")]
 	public class StravaAuthController : ControllerBase
 	{
 		private readonly Database db;
@@ -35,11 +35,17 @@ namespace Mpdeimos.StravaWeather.Controllers
 		public async Task<string> Connected(string code)
 		{
 			var response = await api.GetToken(stravaAppConfig.ClientId, stravaAppConfig.ClientSectret, code);
-			this.db.AccessTokens.Add(new AccessToken
+			var token = this.db.AccessTokens.FirstOrDefault(t => t.UserId == response.Athlete.Id);
+			if (token == null)
 			{
-				UserId = response.Athlete.Id,
-				Token = response.AccessToken
-			});
+				token = new AccessToken
+				{
+					UserId = response.Athlete.Id,
+				};
+				this.db.AccessTokens.Add(token);
+			}
+			token.Token = response.AccessToken;
+
 			this.db.SaveChanges();
 
 			return $"Connected {response.Athlete.Firstname} {response.Athlete.Lastname} ({response.Athlete.Id})";

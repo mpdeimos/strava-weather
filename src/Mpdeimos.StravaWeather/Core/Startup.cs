@@ -35,7 +35,7 @@ namespace Mpdeimos.StravaWeather.Core
 		{
 			services.AddOptions();
 			services.Configure<StravaAppConfig>(Configuration.GetSection("StravaApp"));
-			services.Configure<StravaAppConfig>(Configuration.GetSection("DarkSky"));
+			services.Configure<DarkSkyConfig>(Configuration.GetSection("DarkSky"));
 
 			services.AddDbContext<Database>(options =>
 			{
@@ -56,6 +56,7 @@ namespace Mpdeimos.StravaWeather.Core
 
 			services.AddSingletonFactory<StravaAuthApi, StravaAuthApiFactory>();
 			services.AddSingletonFactory<StravaApi, StravaApiFactory>();
+			services.AddSingletonFactory<DarkSkyApi, DarkSkyApiFactory>();
 		}
 
 		public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory)
