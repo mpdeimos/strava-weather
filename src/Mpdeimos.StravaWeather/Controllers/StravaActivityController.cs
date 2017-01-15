@@ -6,6 +6,7 @@ using System.Net;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Mpdeimos.StravaWeather.Core;
 using Mpdeimos.StravaWeather.Models;
 using Mpdeimos.StravaWeather.WebApi;
@@ -18,10 +19,11 @@ namespace Mpdeimos.StravaWeather.Controllers
 		private readonly Database db;
 		private readonly StravaApi stravaApi;
 		private readonly DarkSkyApi darkSkyApi;
+		private readonly ILogger<StravaActivityController> logger;
 
-
-		public StravaActivityController(Database db, StravaApi stravaApi, DarkSkyApi darkSkyApi)
+		public StravaActivityController(Database db, StravaApi stravaApi, DarkSkyApi darkSkyApi, ILogger<StravaActivityController> logger)
 		{
+			this.logger = logger;
 			this.db = db;
 			this.stravaApi = stravaApi;
 			this.darkSkyApi = darkSkyApi;
@@ -33,19 +35,22 @@ namespace Mpdeimos.StravaWeather.Controllers
 			using (var reader = new StreamReader(this.Request.Body))
 			{
 				var activityUrl = reader.ReadToEnd().Trim();
-				var match = Regex.Match(activityUrl, @"https://.+/(\d+)");
+				logger.LogInformation($"Url: {activityUrl}");
+				var match = Regex.Match(activityUrl, @"https?://.+/(\d+)");
 				if (!match.Success)
 				{
 					throw new HttpException(HttpStatusCode.BadRequest, "Provided url is not an Strava activity url");
 				}
 
 				var activity = await stravaApi.GetActivity(int.Parse(match.Groups[1].Value));
+				logger.LogInformation($"activity: {activity.Name}");
 				if (activity.MeanLocation == null)
 				{
 					return null;
 				}
 
 				var token = db.AccessTokens.Where(t => t.UserId == activity.Athlete.Id).FirstOrDefault();
+				logger.LogInformation($"user: {token}");
 				if (token == null)
 				{
 					throw new HttpException(HttpStatusCode.BadRequest, "Provided athlete is not registered");
@@ -53,7 +58,8 @@ namespace Mpdeimos.StravaWeather.Controllers
 
 				var forecast = await darkSkyApi.GetWeatherInTime(activity.MeanLocation[0], activity.MeanLocation[1], activity.MeanDate.ToUnixTimeSeconds());
 				int temperature = (int)Math.Round(forecast.Currently.Temperature);
-				return await stravaApi.SetActivityName(activity.Id, $"{activity.Name} ({temperature}°C {forecast.Currently.Summary})", token.Token);
+				logger.LogInformation($"weather: {forecast.BestHourlyMatch.Summary}");
+				return await stravaApi.SetActivityName(activity.Id, $"{activity.Name} ({temperature}°C {forecast.BestHourlyMatch.Summary})", token.Token);
 			}
 		}
 
