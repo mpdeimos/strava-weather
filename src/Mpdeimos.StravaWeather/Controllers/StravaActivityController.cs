@@ -43,14 +43,13 @@ namespace Mpdeimos.StravaWeather.Controllers
 				}
 
 				var activity = await stravaApi.GetActivity(int.Parse(match.Groups[1].Value));
-				logger.LogInformation($"activity: {activity.Name}");
 				if (activity.MeanLocation == null)
 				{
 					return null;
 				}
 
 				var token = db.AccessTokens.Where(t => t.UserId == activity.Athlete.Id).FirstOrDefault();
-				logger.LogInformation($"user: {token}");
+				logger.LogInformation($"User: {token}");
 				if (token == null)
 				{
 					throw new HttpException(HttpStatusCode.BadRequest, "Provided athlete is not registered");
@@ -58,7 +57,7 @@ namespace Mpdeimos.StravaWeather.Controllers
 
 				var forecast = await darkSkyApi.GetWeatherInTime(activity.MeanLocation[0], activity.MeanLocation[1], activity.MeanDate.ToUnixTimeSeconds());
 				int temperature = (int)Math.Round(forecast.Currently.Temperature);
-				logger.LogInformation($"weather: {forecast.BestHourlyMatch.Summary}");
+				logger.LogInformation($"Weather: {forecast.BestHourlyMatch.Summary}");
 				return await stravaApi.SetActivityName(activity.Id, $"{activity.Name} ({temperature}°C {forecast.BestHourlyMatch.Summary})", token.Token);
 			}
 		}
