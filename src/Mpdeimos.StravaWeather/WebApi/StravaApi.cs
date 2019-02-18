@@ -8,18 +8,18 @@ namespace Mpdeimos.StravaWeather.WebApi
 	public interface StravaApi
 	{
 		[Get("/activities/{id}")]
-		Task<Activity> GetActivity([Path] int id);
+		Task<Activity> GetActivity([Path] long id);
 
 		[Get("athlete/activities")]
 		Task<Activity[]> GetActivities([Query("access_token")] string accessToken);
 
 		[Put("/activities/{id}")]
-		Task<Activity> SetActivityName([Path] int id, [Query] string name, [Query("access_token")] string accessToken);
+		Task<Activity> SetActivityName([Path] long id, [Query] string name, [Query("access_token")] string accessToken);
 	}
 
 	public class Activity
 	{
-		public int Id { get; set; }
+		public long Id { get; set; }
 		public string Name { get; set; }
 		public Athlete Athlete { get; set; }
 
