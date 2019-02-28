@@ -52,7 +52,7 @@ namespace Mpdeimos.StravaWeather.Controllers
 				logger.LogInformation($"User: {token}");
 				if (token == null)
 				{
-					throw new HttpException(HttpStatusCode.BadRequest, "Provided athlete is not registered");
+					throw new HttpException(HttpStatusCode.BadRequest, $"Provided athlete '{activity.Athlete.Id}' is not registered");
 				}
 
 				var forecast = await darkSkyApi.GetWeatherInTime(activity.MeanLocation[0], activity.MeanLocation[1], activity.MeanDate.ToUnixTimeSeconds());
