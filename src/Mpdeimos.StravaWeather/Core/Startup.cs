@@ -15,22 +15,12 @@ namespace Mpdeimos.StravaWeather.Core
 {
 	public class Startup
 	{
-		public IConfigurationRoot Configuration { get; private set; }
-		public Startup(IHostingEnvironment env)
+		public IConfiguration Configuration { get; private set; }
+		public Startup(IConfiguration configuration)
 		{
-			var builder = new ConfigurationBuilder()
-				.SetBasePath(env.ContentRootPath)
-				.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-				.AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true);
-
-			if (env.IsDevelopment())
-			{
-				builder.AddUserSecrets();
-			}
-
-			builder.AddEnvironmentVariables();
-			Configuration = builder.Build();
+			Configuration = configuration;
 		}
+
 		public void ConfigureServices(IServiceCollection services)
 		{
 			services.AddOptions();
@@ -43,7 +33,7 @@ namespace Mpdeimos.StravaWeather.Core
 				if (string.IsNullOrEmpty(databaseUrl))
 				{
 					Console.WriteLine("Using in-memory db");
-					options.UseInMemoryDatabase();
+					options.UseInMemoryDatabase("strava-weather");
 				}
 				else
 				{

@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using System.Linq.Expressions;
+using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 
@@ -13,14 +14,14 @@ namespace Mpdeimos.StravaWeather
 				.AddCommandLine(args)
 				.Build();
 
-			var host = new WebHostBuilder()
-				.UseContentRoot(Directory.GetCurrentDirectory())
+			BuildWebHost(args, configurations).Run();
+		}
+
+		private static IWebHost BuildWebHost(string[] args, IConfigurationRoot configurations)
+			=> WebHost.CreateDefaultBuilder(args)
 				.UseConfiguration(configurations)
-				.UseKestrel()
 				.UseStartup<Mpdeimos.StravaWeather.Core.Startup>()
 				.Build();
 
-			host.Run();
-		}
 	}
 }

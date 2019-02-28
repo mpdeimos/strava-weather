@@ -3,5 +3,7 @@
 		".git/": true,
 		"**/bin/": true,
 		"**/obj/": true
-	}
+	},
+	"editor.insertSpaces": false,
+	"editor.detectIndentation": true
 }
