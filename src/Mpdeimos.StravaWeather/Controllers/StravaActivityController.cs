@@ -42,24 +42,31 @@ namespace Mpdeimos.StravaWeather.Controllers
 					throw new HttpException(HttpStatusCode.BadRequest, "Provided url is not an Strava activity url");
 				}
 
-				var activity = await stravaApi.GetActivity(long.Parse(match.Groups[1].Value));
-				if (activity.MeanLocation == null)
-				{
-					return null;
-				}
-
-				var token = db.AccessTokens.Where(t => t.UserId == activity.Athlete.Id).FirstOrDefault();
-				logger.LogInformation($"User: {token}");
-				if (token == null)
-				{
-					throw new HttpException(HttpStatusCode.BadRequest, $"Provided athlete '{activity.Athlete.Id}' is not registered");
-				}
-
-				var forecast = await darkSkyApi.GetWeatherInTime(activity.MeanLocation[0], activity.MeanLocation[1], activity.MeanDate.ToUnixTimeSeconds());
-				int temperature = (int)Math.Round(forecast.Currently.Temperature);
-				logger.LogInformation($"Weather: {forecast.BestHourlyMatch.Summary}");
-				return await stravaApi.SetActivityName(activity.Id, $"{activity.Name} ({temperature}°C {forecast.BestHourlyMatch.Summary})", token.Token);
+				long id = long.Parse(match.Groups[1].Value);
+				return await RegisterActivity(id);
 			}
+		}
+
+		[HttpGet("register/{id}")]
+		private async Task<Activity> RegisterActivity(long id)
+		{
+			var activity = await stravaApi.GetActivity(id);
+			if (activity.MeanLocation == null)
+			{
+				return null;
+			}
+
+			var token = db.AccessTokens.Where(t => t.UserId == activity.Athlete.Id).FirstOrDefault();
+			logger.LogInformation($"User: {token}");
+			if (token == null)
+			{
+				throw new HttpException(HttpStatusCode.BadRequest, $"Provided athlete '{activity.Athlete.Id}' is not registered");
+			}
+
+			var forecast = await darkSkyApi.GetWeatherInTime(activity.MeanLocation[0], activity.MeanLocation[1], activity.MeanDate.ToUnixTimeSeconds());
+			int temperature = (int)Math.Round(forecast.Currently.Temperature);
+			logger.LogInformation($"Weather: {forecast.BestHourlyMatch.Summary}");
+			return await stravaApi.SetActivityName(activity.Id, $"{activity.Name} ({temperature}°C {forecast.BestHourlyMatch.Summary})", token.Token);
 		}
 
 		private async Task<dynamic> AttachForecast(Activity activity)
