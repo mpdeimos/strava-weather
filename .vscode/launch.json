@@ -6,7 +6,7 @@
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceRoot}/src/Mpdeimos.StravaWeather/bin/Debug/netcoreapp2.0/Mpdeimos.StravaWeather.dll",
+            "program": "${workspaceRoot}/src/Mpdeimos.StravaWeather/bin/Debug/netcoreapp2.1/Mpdeimos.StravaWeather.dll",
             "args": [],
             "env": {
                 "ASPNETCORE_ENVIRONMENT": "Development"
