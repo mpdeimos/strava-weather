@@ -42,7 +42,7 @@ namespace Mpdeimos.StravaWeather.Controllers
 					throw new HttpException(HttpStatusCode.BadRequest, "Provided url is not an Strava activity url");
 				}
 
-				var activity = await stravaApi.GetActivity(int.Parse(match.Groups[1].Value));
+				var activity = await stravaApi.GetActivity(long.Parse(match.Groups[1].Value));
 				if (activity.MeanLocation == null)
 				{
 					return null;
