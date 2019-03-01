@@ -47,13 +47,14 @@ namespace Mpdeimos.StravaWeather.Controllers
 			}
 		}
 
+
 		[HttpGet("register/{id}")]
-		private async Task<Activity> RegisterActivity(long id)
+		public async Task<Activity> RegisterActivity(long id)
 		{
 			var activity = await stravaApi.GetActivity(id);
 			if (activity.MeanLocation == null)
 			{
-				return null;
+				throw new HttpException(HttpStatusCode.BadRequest, $"Activity '{id}' not found or not public");
 			}
 
 			var token = db.AccessTokens.Where(t => t.UserId == activity.Athlete.Id).FirstOrDefault();
@@ -67,35 +68,6 @@ namespace Mpdeimos.StravaWeather.Controllers
 			int temperature = (int)Math.Round(forecast.Currently.Temperature);
 			logger.LogInformation($"Weather: {forecast.BestHourlyMatch.Summary}");
 			return await stravaApi.SetActivityName(activity.Id, $"{activity.Name} ({temperature}°C {forecast.BestHourlyMatch.Summary})", token.Token);
-		}
-
-		private async Task<dynamic> AttachForecast(Activity activity)
-		{
-			Forecast forecast = null;
-			if (activity.MeanLocation != null)
-			{
-				forecast = await darkSkyApi.GetWeatherInTime(activity.MeanLocation[0], activity.MeanLocation[1], activity.MeanDate.ToUnixTimeSeconds());
-			}
-			return new { Activity = activity, Forecast = forecast };
-		}
-
-		[HttpGet("{athlete}")]
-		public async Task<List<dynamic>> GetActivities(int athlete)
-		{
-			var token = db.AccessTokens.Where(t => t.UserId == athlete).FirstOrDefault();
-			if (token == null)
-			{
-				throw new HttpException(HttpStatusCode.BadRequest, "Provided athlete is not registered");
-			}
-
-			var activities = await stravaApi.GetActivities(token.Token);
-			var result = new List<dynamic>();
-			foreach (var activity in activities)
-			{
-				result.Add(await AttachForecast(activity));
-			}
-
-			return result;
 		}
 	}
 }
